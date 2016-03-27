@@ -12,6 +12,7 @@ public class Player extends BorderPane {
     MediaPlayer player;
     MediaView view;
     Pane mpane;
+    MediaBar bar;
 
     public Player(String filePath) {
         media = new Media(filePath);
@@ -22,6 +23,8 @@ public class Player extends BorderPane {
         mpane.getChildren().add(view);
 
         setCenter(mpane);
+        bar = new MediaBar(player);
+        setBottom(bar);
         player.play();
     }
 }
