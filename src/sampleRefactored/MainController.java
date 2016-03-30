@@ -98,18 +98,17 @@ public class MainController implements Initializable {
     private void initButtons() {
         playBtn.setFont(FontAwesome.FONT);
         if (mediaPlayer.autoPlayProperty().getValue()) {
-            playBtn.setText(FontAwesome.ICON_PAUSE);
+            playBtn.setText(FontAwesome.ICON_PAUSE2);
         } else {
-            playBtn.setText(FontAwesome.ICON_PLAY);
+            playBtn.setText(FontAwesome.ICON_PLAY3);
         }
 
         increaseRateBtn.setFont(FontAwesome.FONT);
-        increaseRateBtn.setText(FontAwesome.ICON_FAST_FW);
+        increaseRateBtn.setText(FontAwesome.ICON_FORWARD3);
         decreaseRateBtn.setFont(FontAwesome.FONT);
-        // FIXME: 30.03.2016 missing symbol in font to decrease speed
-        decreaseRateBtn.setText(FontAwesome.ICON_FAST_FW);
+        decreaseRateBtn.setText(FontAwesome.ICON_BACKWARD2);
         reloadBtn.setFont(FontAwesome.FONT);
-        reloadBtn.setText(FontAwesome.ICON_CW);
+        reloadBtn.setText(FontAwesome.ICON_SPINNER11);
     }
 
     private String getCurrentTimeFormatted() {
@@ -139,12 +138,12 @@ public class MainController implements Initializable {
         mediaPlayer.setRate(1);
         if (status == Status.PLAYING) {
             mediaPlayer.pause();
-            playBtn.setText(FontAwesome.ICON_PLAY);
+            playBtn.setText(FontAwesome.ICON_PLAY3);
         }
 
         if (status == Status.PAUSED || status == Status.HALTED || status == Status.DISPOSED) {
             mediaPlayer.play();
-            playBtn.setText(FontAwesome.ICON_PAUSE);
+            playBtn.setText(FontAwesome.ICON_PAUSE2);
         }
     }
 
