@@ -6,6 +6,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
@@ -30,6 +31,14 @@ public class MainController implements Initializable {
     private Label currentTimeLabel;
     @FXML
     private Label totalTimeLabel;
+    @FXML
+    private Button playBtn;
+    @FXML
+    private Button increaseRateBtn;
+    @FXML
+    private Button decreaseRateBtn;
+    @FXML
+    private Button reloadBtn;
 
     private MediaPlayer mediaPlayer;
     private Media media;
@@ -47,6 +56,8 @@ public class MainController implements Initializable {
         mediaPlayer = new MediaPlayer(media);
         mediaView.setMediaPlayer(mediaPlayer);
         mediaPlayer.setAutoPlay(true);
+
+        initButtons();
 
         // preserve video ratio and filled into scene
         DoubleProperty width = mediaView.fitWidthProperty();
@@ -80,9 +91,24 @@ public class MainController implements Initializable {
             @Override
             public void run() {
                 totalTimeLabel.setText(getTotalDurationFormatted());
-
             }
         });
+    }
+
+    private void initButtons() {
+        playBtn.setFont(FontAwesome.FONT);
+        if (mediaPlayer.autoPlayProperty().getValue()) {
+            playBtn.setText(FontAwesome.ICON_PAUSE);
+        } else {
+            playBtn.setText(FontAwesome.ICON_PLAY);
+        }
+
+        increaseRateBtn.setFont(FontAwesome.FONT);
+        increaseRateBtn.setText(FontAwesome.ICON_INCREASE_RATE);
+        decreaseRateBtn.setFont(FontAwesome.FONT);
+        decreaseRateBtn.setText(FontAwesome.ICON_DECREASE_RATE);
+        reloadBtn.setFont(FontAwesome.FONT);
+        reloadBtn.setText(FontAwesome.ICON_RELOAD);
     }
 
     private String getCurrentTimeFormatted() {
@@ -109,12 +135,15 @@ public class MainController implements Initializable {
 
     public void playPause(ActionEvent event) {
         Status status = mediaPlayer.getStatus();
+        mediaPlayer.setRate(1);
         if (status == Status.PLAYING) {
             mediaPlayer.pause();
+            playBtn.setText(FontAwesome.ICON_PLAY);
         }
 
         if (status == Status.PAUSED || status == Status.HALTED || status == Status.DISPOSED) {
             mediaPlayer.play();
+            playBtn.setText(FontAwesome.ICON_PAUSE);
         }
     }
 
