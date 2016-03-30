@@ -104,11 +104,12 @@ public class MainController implements Initializable {
         }
 
         increaseRateBtn.setFont(FontAwesome.FONT);
-        increaseRateBtn.setText(FontAwesome.ICON_INCREASE_RATE);
+        increaseRateBtn.setText(FontAwesome.ICON_FAST_FW);
         decreaseRateBtn.setFont(FontAwesome.FONT);
-        decreaseRateBtn.setText(FontAwesome.ICON_DECREASE_RATE);
+        // FIXME: 30.03.2016 missing symbol in font to decrease speed
+        decreaseRateBtn.setText(FontAwesome.ICON_FAST_FW);
         reloadBtn.setFont(FontAwesome.FONT);
-        reloadBtn.setText(FontAwesome.ICON_RELOAD);
+        reloadBtn.setText(FontAwesome.ICON_CW);
     }
 
     private String getCurrentTimeFormatted() {
