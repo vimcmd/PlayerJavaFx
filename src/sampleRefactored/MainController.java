@@ -12,6 +12,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -85,23 +86,19 @@ public class MainController implements Initializable {
     }
 
     private String getCurrentTimeFormatted() {
-        // FIXME: 29.03.2016 don't like that
-        int hours = (int) mediaPlayer.getCurrentTime().toHours();
-        int minutes = (int) mediaPlayer.getCurrentTime().toMinutes() - hours * 60;
-        int seconds = (int) mediaPlayer.getCurrentTime().toSeconds() - hours * 60 * 60 - minutes * 60;
-        return getTimeFormatted(hours, minutes, seconds);
+        return getTimeFormatted(mediaPlayer.getCurrentTime());
     }
 
     private String getTotalDurationFormatted() {
-        // FIXME: 29.03.2016 don't like that
-        final int hours = (int) mediaPlayer.getTotalDuration().toHours();
-        final int minutes = (int) mediaPlayer.getTotalDuration().toMinutes() - hours * 60;
-        final int seconds = (int) mediaPlayer.getTotalDuration().toSeconds() - hours * 60 * 60 - minutes * 60;
-        return getTimeFormatted(hours, minutes, seconds);
+        return getTimeFormatted(mediaPlayer.getTotalDuration());
     }
 
-    private String getTimeFormatted(int hours, int minutes, int seconds) {
+    private String getTimeFormatted(Duration duration) {
         String time;
+        int hours = (int) duration.toHours();
+        int minutes = (int) duration.toMinutes() - hours * 60;
+        int seconds = (int) duration.toSeconds() - hours * 60 * 60 - minutes * 60;
+
         if (hours > 0 & minutes > 0 & seconds > 0) {
             time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
         } else {
