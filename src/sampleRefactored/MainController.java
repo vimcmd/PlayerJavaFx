@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
@@ -25,6 +26,8 @@ public class MainController implements Initializable {
     private MediaView mediaView;
     @FXML
     private Slider volumeSlider;
+    @FXML
+    private Label volumeLabel;
     @FXML
     private Slider seekSlider;
     @FXML
@@ -44,6 +47,7 @@ public class MainController implements Initializable {
     private Media media;
     private double rate = 1;
     private double rateStep = 0.2;
+    private double volumeValue = 100;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -65,9 +69,20 @@ public class MainController implements Initializable {
         width.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
         height.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
 
-        volumeSlider.setValue(mediaPlayer.getVolume() * 100);
         volumeSlider.valueProperty().addListener(observable -> {
             mediaPlayer.setVolume(volumeSlider.getValue() / 100);
+            if (volumeSlider.getValue() >= 70) {
+                volumeLabel.setText(FontAwesome.ICON_VOLUME_HIGH);
+            }
+            if (volumeSlider.getValue() >= 30 && volumeSlider.getValue() < 70) {
+                volumeLabel.setText(FontAwesome.ICON_VOLUME_MEDIUM);
+            }
+            if (volumeSlider.getValue() > 0 && volumeSlider.getValue() < 30) {
+                volumeLabel.setText(FontAwesome.ICON_VOLUME_LOW);
+            }
+            if (volumeSlider.getValue() == 0) {
+                volumeLabel.setText(FontAwesome.ICON_VOLUME_MUTE2);
+            }
         });
 
         seekSlider.setValue(0);
@@ -109,6 +124,9 @@ public class MainController implements Initializable {
         decreaseRateBtn.setText(FontAwesome.ICON_BACKWARD2);
         reloadBtn.setFont(FontAwesome.FONT);
         reloadBtn.setText(FontAwesome.ICON_SPINNER11);
+        volumeLabel.setFont(FontAwesome.FONT);
+        volumeSlider.setValue(mediaPlayer.getVolume() * 100);
+        volumeLabel.setText(FontAwesome.ICON_VOLUME_HIGH);
     }
 
     private String getCurrentTimeFormatted() {
@@ -164,6 +182,15 @@ public class MainController implements Initializable {
         mediaPlayer.setRate(rate);
         mediaPlayer.seek(mediaPlayer.getStartTime());
         mediaPlayer.play();
+    }
+
+    public void muteClick(MouseEvent event) {
+        if (volumeSlider.getValue() > 0) {
+            this.volumeValue = volumeSlider.getValue();
+            volumeSlider.setValue(0);
+        } else {
+            volumeSlider.setValue(this.volumeValue);
+        }
     }
 
 }

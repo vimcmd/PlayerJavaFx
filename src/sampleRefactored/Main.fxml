@@ -22,6 +22,11 @@
                 <Label fx:id="currentTimeLabel" text="00:00" />
                 <Slider fx:id="seekSlider" HBox.hgrow="ALWAYS" />
                 <Label fx:id="totalTimeLabel" text="00:00" />
+            <Label fx:id="volumeLabel" alignment="CENTER" minWidth="14.0" onMouseClicked="#muteClick" text="?">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
                 <Slider fx:id="volumeSlider" minWidth="30.0" prefWidth="70.0" value="100.0" />
             </children>
             <opaqueInsets>
