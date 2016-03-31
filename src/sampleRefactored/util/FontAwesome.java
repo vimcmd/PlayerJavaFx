@@ -1,4 +1,4 @@
-package sampleRefactored;
+package sampleRefactored.util;
 
 import javafx.scene.text.Font;
 
