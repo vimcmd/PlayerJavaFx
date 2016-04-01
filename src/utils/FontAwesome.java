@@ -1,13 +1,13 @@
-package sampleRefactored.util;
+package utils;
 
 import javafx.scene.text.Font;
 
 /**
- * Font demo: /res/demo.html
+ * Font demo: /resources/demo.html
  */
 public class FontAwesome {
 
-    public static final Font FONT = Font.loadFont(FontAwesome.class.getResourceAsStream("/res/fonts/icomoon.ttf"), 12);
+    public static final Font FONT = Font.loadFont(FontAwesome.class.getResourceAsStream("/resources/fonts/icomoon.ttf"), 12);
 
     public static final String ICON_BACKWARD = "\uE916";
     public static final String ICON_BACKWARD2 = "\uE91b";

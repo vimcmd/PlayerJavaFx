@@ -1,12 +1,12 @@
-package sampleRefactored.controller.mediaControls;
+package controllers.mediaControls;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
-import sampleRefactored.util.FontAwesome;
-import sampleRefactored.controller.MainController;
+import utils.FontAwesome;
+import controllers.MainController;
 
 /**
  * fx:id="mediaControls"

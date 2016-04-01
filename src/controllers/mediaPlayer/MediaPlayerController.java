@@ -1,6 +1,4 @@
-package sampleRefactored.controller.mediaPlayer;
-
-import sampleRefactored.controller.MainController;
+package controllers.mediaPlayer;
 
 public class MediaPlayerController {
 
