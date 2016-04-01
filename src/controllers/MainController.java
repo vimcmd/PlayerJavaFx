@@ -18,10 +18,6 @@ public class MainController {
     public void initialize() {
         mediaControlsController.init(this);
         //mediaPlayerController.init(this);
-
-        borderPane.widthProperty().addListener(e -> {
-            mediaControlsController.setHBoxWidth(borderPane.widthProperty().getValue());
-        });
     }
 
 
