@@ -7,7 +7,8 @@ import javafx.scene.text.Font;
  */
 public class FontAwesome {
 
-    public static final Font FONT = Font.loadFont(FontAwesome.class.getResourceAsStream("/resources/fonts/icomoon.ttf"), 12);
+    // TODO: 01.04.2016 set size via setter?
+    public static final Font FONT = Font.loadFont(FontAwesome.class.getResourceAsStream("/resources/fonts/icomoon.ttf"), 16);
 
     public static final String ICON_BACKWARD = "\uE916";
     public static final String ICON_BACKWARD2 = "\uE91b";

@@ -13,7 +13,7 @@
       <Label fx:id="currentTimeLabel" text="Label" />
       <Slider fx:id="seekSlider" HBox.hgrow="ALWAYS" />
       <Label fx:id="totalTimeLabel" text="Label" />
-      <Label fx:id="volumeLabel" text="?" />
+      <Label fx:id="volumeLabel" onMouseClicked="#muteClick" text="?" />
       <Slider fx:id="volumeSlider" minWidth="30.0" prefWidth="70.0" value="100.0" />
    </children>
    <padding>

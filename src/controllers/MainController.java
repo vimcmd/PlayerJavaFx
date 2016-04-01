@@ -17,7 +17,7 @@ public class MainController {
     @FXML
     public void initialize() {
         mediaControlsController.init(this);
-        //mediaPlayerController.init(this);
+        mediaPlayerController.init(this);
     }
 
 
