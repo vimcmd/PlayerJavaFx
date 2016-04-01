@@ -1,10 +1,11 @@
 package controllers.mediaPlayer;
 
+import javafx.fxml.FXML;
+import javafx.scene.media.MediaView;
+
 public class MediaPlayerController {
 
-    //private MainController mainController;
-    //
-    //public void init(MainController mainController) {
-    //    this.mainController = mainController;
-    //}
+    @FXML
+    private MediaView mediaView;
+
 }
