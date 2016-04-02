@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import controllers.mediaControls.MediaControlsController;
 import controllers.mediaPlayer.MediaPlayerController;
+import javafx.scene.media.MediaPlayer;
 
 public class MainController {
 
@@ -11,13 +12,15 @@ public class MainController {
     MediaControlsController mediaControlsController;
     @FXML
     MediaPlayerController mediaPlayerController;
-    @FXML
-    private BorderPane borderPane;
 
     @FXML
     public void initialize() {
-        mediaControlsController.init(this);
         mediaPlayerController.init(this);
+        mediaControlsController.init(this);
+    }
+
+    public MediaPlayer getMediaPlayer() {
+        return mediaPlayerController.getMediaPlayer();
     }
 
 

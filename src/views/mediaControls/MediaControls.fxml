@@ -2,14 +2,13 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
 <HBox fx:id="hBox" alignment="CENTER" minHeight="50.0" prefHeight="50.0" spacing="5.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.mediaControls.MediaControlsController">
    <children>
-      <Button fx:id="slowPlayback" mnemonicParsing="false" text="Button" />
-      <Button fx:id="playPauseBtn" mnemonicParsing="false" text="Button" />
-      <Button fx:id="fastPlayback" mnemonicParsing="false" text="Button" />
+      <Button fx:id="slowPlayback" mnemonicParsing="false" onAction="#decreasePlaybackSpeed" text="Button" />
+      <Button fx:id="playPauseBtn" mnemonicParsing="false" onAction="#playPause" text="Button" />
+      <Button fx:id="fastPlayback" mnemonicParsing="false" onAction="#increasePlaybackSpeed" text="Button" />
       <Label fx:id="currentTimeLabel" text="Label" />
       <Slider fx:id="seekSlider" HBox.hgrow="ALWAYS" />
       <Label fx:id="totalTimeLabel" text="Label" />

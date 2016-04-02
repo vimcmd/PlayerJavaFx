@@ -1,25 +1,21 @@
 package controllers.mediaControls;
 
+import controllers.MainController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import utils.FontAwesome;
-import controllers.MainController;
-
-import java.io.File;
-import java.net.MalformedURLException;
 
 /**
  * fx:id="mediaControls"
  */
-public class MediaControlsController {
+public class MediaControlsController implements IMediaControls {
 
     private MainController mainController;
 
@@ -32,8 +28,6 @@ public class MediaControlsController {
     @FXML
     private Slider volumeSlider;
     @FXML
-    private HBox hBox;
-    @FXML
     private Button fastPlayback;
     @FXML
     private Slider seekSlider;
@@ -42,10 +36,9 @@ public class MediaControlsController {
     @FXML
     private Button playPauseBtn;
 
+    private MediaPlayer mediaPlayer;
     // initial volume value = 100, after uses for remember value on mute/unmute action
     private double volumeValue = 100;
-    //private MediaPlayer mediaPlayer;
-    //private Media media;
     private double rate = 1;
     private double rateStep = 0.2;
 
@@ -56,40 +49,30 @@ public class MediaControlsController {
 
         // TODO: 01.04.2016 get file uri from another class
         // TODO: 01.04.2016 get mediaPlayer from another class or inject it in method argument
-        //String file = new File("D:/video.mp4").getAbsolutePath();
-        //try {
-        //    media = new Media(new File(file).toURI().toURL().toExternalForm());
-        //} catch (MalformedURLException e) {
-        //    e.printStackTrace();
-        //}
-        //mediaPlayer = new MediaPlayer(media);
-        //mediaView.setMediaPlayer(mediaPlayer);
-        //mediaPlayer.setAutoPlay(true);
+
     }
 
-
     public void initControls() {
+        mediaPlayer = mainController.getMediaPlayer();
+
         slowPlayback.setFont(FontAwesome.FONT);
         slowPlayback.setText(FontAwesome.ICON_BACKWARD2);
         playPauseBtn.setFont(FontAwesome.FONT);
 
-        //if (mediaPlayer.autoPlayProperty().getValue()) {
-        //    playPauseBtn.setText(FontAwesome.ICON_PAUSE2);
-        //} else {
-        //    playPauseBtn.setText(FontAwesome.ICON_PLAY3);
-        //}
-        playPauseBtn.setText(FontAwesome.ICON_PLAY3);
+        if (mediaPlayer.autoPlayProperty().getValue()) {
+            playPauseBtn.setText(FontAwesome.ICON_PAUSE2);
+        } else {
+            playPauseBtn.setText(FontAwesome.ICON_PLAY3);
+        }
 
         fastPlayback.setFont(FontAwesome.FONT);
         fastPlayback.setText(FontAwesome.ICON_FORWARD3);
 
         volumeLabel.setFont(FontAwesome.FONT);
-        // TODO: 31.03.2016 set volumeLabel based on media
         volumeLabel.setText(FontAwesome.ICON_VOLUME_HIGH);
         volumeLabel.setPrefWidth(FontAwesome.FONT.getSize() + 2); // prevent bouncing when icon changes level (mute-low-medium-high)
 
         currentTimeLabel.setText("00:00");
-        // TODO: 31.03.2016 set totalTime based on media duration
         totalTimeLabel.setText("00:00");
 
         final int START_PLAYBACK_POSITION = 0;
@@ -101,7 +84,7 @@ public class MediaControlsController {
 
     private void addListeners() {
         volumeSlider.valueProperty().addListener(observable -> {
-            //mediaPlayer.setVolume(volumeSlider.getValue() / 100);
+            mediaPlayer.setVolume(volumeSlider.getValue() / 100);
             if (volumeSlider.getValue() >= 70) {
                 volumeLabel.setText(FontAwesome.ICON_VOLUME_HIGH);
             }
@@ -116,11 +99,29 @@ public class MediaControlsController {
             }
         });
 
-        //seekSlider.valueProperty().addListener(observable -> {
-        //    if (seekSlider.isPressed()) {
-        //        mediaPlayer.seek(mediaPlayer.getMedia().getDuration().multiply(seekSlider.getValue() / 100));
-        //    }
-        //});
+        seekSlider.valueProperty().addListener(observable -> {
+            if (seekSlider.isPressed()) {
+                mediaPlayer.seek(mediaPlayer.getMedia().getDuration().multiply(seekSlider.getValue() / 100));
+            }
+        });
+
+        mediaPlayer.currentTimeProperty().addListener(e -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    seekSlider.setValue(mediaPlayer.getCurrentTime().toMillis() / mediaPlayer.getTotalDuration()
+                                                                                             .toMillis() * 100);
+                    currentTimeLabel.setText(getCurrentTimeFormatted());
+                }
+            });
+        });
+
+        mediaPlayer.setOnReady(new Runnable() {
+            @Override
+            public void run() {
+                totalTimeLabel.setText(getTotalDurationFormatted());
+            }
+        });
     }
 
     public void muteClick(MouseEvent event) {
@@ -147,46 +148,46 @@ public class MediaControlsController {
         return time;
     }
 
-    //private String getCurrentTimeFormatted() {
-    //    return getTimeFormatted(mediaPlayer.getCurrentTime());
-    //}
-    //
-    //private String getTotalDurationFormatted() {
-    //    return getTimeFormatted(mediaPlayer.getTotalDuration());
-    //}
+    private String getCurrentTimeFormatted() {
+        return getTimeFormatted(mediaPlayer.getCurrentTime());
+    }
 
-    //public void playPause(ActionEvent event) {
-    //    MediaPlayer.Status status = mediaPlayer.getStatus();
-    //    mediaPlayer.setRate(1);
-    //    if (status == MediaPlayer.Status.PLAYING) {
-    //        mediaPlayer.pause();
-    //        playPauseBtn.setText(FontAwesome.ICON_PLAY3);
-    //    }
-    //
-    //    if (status == MediaPlayer.Status.PAUSED || status == MediaPlayer.Status.HALTED || status == MediaPlayer.Status.DISPOSED) {
-    //        mediaPlayer.play();
-    //        playPauseBtn.setText(FontAwesome.ICON_PAUSE2);
-    //    }
-    //}
+    private String getTotalDurationFormatted() {
+        return getTimeFormatted(mediaPlayer.getTotalDuration());
+    }
 
-    //public void increasePlaybackSpeed(ActionEvent event) {
-    //    this.rate += rateStep;
-    //    mediaPlayer.setRate(rate);
-    //}
+    public void playPause(ActionEvent event) {
+        MediaPlayer.Status status = mediaPlayer.getStatus();
+        mediaPlayer.setRate(1);
+        if (status == MediaPlayer.Status.PLAYING) {
+            mediaPlayer.pause();
+            playPauseBtn.setText(FontAwesome.ICON_PLAY3);
+        }
 
-    //public void decreasePlaybackSpeed(ActionEvent event) {
-    //    if (this.rate - this.rateStep > this.rateStep) {
-    //        this.rate -= 0.2;
-    //    }
-    //    mediaPlayer.setRate(rate);
-    //}
+        if (status == MediaPlayer.Status.PAUSED || status == MediaPlayer.Status.HALTED || status == MediaPlayer.Status.DISPOSED) {
+            mediaPlayer.play();
+            playPauseBtn.setText(FontAwesome.ICON_PAUSE2);
+        }
+    }
 
-    //public void reload(ActionEvent event) {
-    //    this.rate = 1;
-    //    mediaPlayer.setRate(rate);
-    //    mediaPlayer.seek(mediaPlayer.getStartTime());
-    //    mediaPlayer.play();
-    //}
+    public void increasePlaybackSpeed(ActionEvent event) {
+        this.rate += rateStep;
+        mediaPlayer.setRate(rate);
+    }
+
+    public void decreasePlaybackSpeed(ActionEvent event) {
+        if (this.rate - this.rateStep > this.rateStep) {
+            this.rate -= 0.2;
+        }
+        mediaPlayer.setRate(rate);
+    }
+
+    public void reload(ActionEvent event) {
+        this.rate = 1;
+        mediaPlayer.setRate(rate);
+        mediaPlayer.seek(mediaPlayer.getStartTime());
+        mediaPlayer.play();
+    }
 
 
 }
