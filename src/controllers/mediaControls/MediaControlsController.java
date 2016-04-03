@@ -51,7 +51,7 @@ public class MediaControlsController implements IMediaControls {
             public void run() {
                 totalTimeLabel.setText(getTotalDurationFormatted());
                 addListeners();
-                mediaPlayer.setVolume(volumeValue / 100);
+                mediaPlayer.setVolume(volumeSlider.getValue() / 100);
             }
         });
 
