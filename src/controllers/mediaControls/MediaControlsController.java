@@ -37,18 +37,22 @@ public class MediaControlsController implements IMediaControls {
     private Button playPauseBtn;
 
     private MediaPlayer mediaPlayer;
-    // initial volume value = 100, after uses for remember value on mute/unmute action
-    private double volumeValue = 100;
+    private double volumeValue = 100; // initial volume value = 100, after uses for remember value on mute/unmute action
     private double rate = 1;
     private double rateStep = 0.2;
 
     public void init(MainController mainController) {
         this.mainController = mainController;
         initControls();
-        addListeners();
 
-        // TODO: 01.04.2016 get file uri from another class
-        // TODO: 01.04.2016 get mediaPlayer from another class or inject it in method argument
+        mediaPlayer.setOnReady(new Runnable() {
+            @Override
+            public void run() {
+                totalTimeLabel.setText(getTotalDurationFormatted());
+                addListeners();
+                mediaPlayer.setVolume(volumeValue / 100);
+            }
+        });
 
     }
 
@@ -71,6 +75,7 @@ public class MediaControlsController implements IMediaControls {
         volumeLabel.setFont(FontAwesome.FONT);
         volumeLabel.setText(FontAwesome.ICON_VOLUME_HIGH);
         volumeLabel.setPrefWidth(FontAwesome.FONT.getSize() + 2); // prevent bouncing when icon changes level (mute-low-medium-high)
+        volumeLabelRefresh();
 
         currentTimeLabel.setText("00:00");
         totalTimeLabel.setText("00:00");
@@ -78,25 +83,16 @@ public class MediaControlsController implements IMediaControls {
         final int START_PLAYBACK_POSITION = 0;
         seekSlider.setValue(START_PLAYBACK_POSITION);
 
-        volumeSlider.setValue(100);
+        if (volumeSlider.getValue() > 0 && volumeSlider.getValue() < 100) {
+            volumeValue = volumeSlider.getValue();
+        }
 
     }
 
     private void addListeners() {
         volumeSlider.valueProperty().addListener(observable -> {
             mediaPlayer.setVolume(volumeSlider.getValue() / 100);
-            if (volumeSlider.getValue() >= 70) {
-                volumeLabel.setText(FontAwesome.ICON_VOLUME_HIGH);
-            }
-            if (volumeSlider.getValue() >= 30 && volumeSlider.getValue() < 70) {
-                volumeLabel.setText(FontAwesome.ICON_VOLUME_MEDIUM);
-            }
-            if (volumeSlider.getValue() > 0 && volumeSlider.getValue() < 30) {
-                volumeLabel.setText(FontAwesome.ICON_VOLUME_LOW);
-            }
-            if (volumeSlider.getValue() == 0) {
-                volumeLabel.setText(FontAwesome.ICON_VOLUME_MUTE2);
-            }
+            volumeLabelRefresh();
         });
 
         seekSlider.valueProperty().addListener(observable -> {
@@ -115,13 +111,21 @@ public class MediaControlsController implements IMediaControls {
                 }
             });
         });
+    }
 
-        mediaPlayer.setOnReady(new Runnable() {
-            @Override
-            public void run() {
-                totalTimeLabel.setText(getTotalDurationFormatted());
-            }
-        });
+    private void volumeLabelRefresh() {
+        if (volumeSlider.getValue() >= 70) {
+            volumeLabel.setText(FontAwesome.ICON_VOLUME_HIGH);
+        }
+        if (volumeSlider.getValue() >= 30 && volumeSlider.getValue() < 70) {
+            volumeLabel.setText(FontAwesome.ICON_VOLUME_MEDIUM);
+        }
+        if (volumeSlider.getValue() > 0 && volumeSlider.getValue() < 30) {
+            volumeLabel.setText(FontAwesome.ICON_VOLUME_LOW);
+        }
+        if (volumeSlider.getValue() == 0) {
+            volumeLabel.setText(FontAwesome.ICON_VOLUME_MUTE2);
+        }
     }
 
     public void muteClick(MouseEvent event) {

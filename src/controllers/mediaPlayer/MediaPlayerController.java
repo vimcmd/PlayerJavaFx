@@ -21,14 +21,19 @@ public class MediaPlayerController implements IMediaPlayer {
     private MediaPlayer mediaPlayer;
     private Media media;
 
+    // FIXME: 03.04.2016 bug - on window resize mediaView hovers other views (controls and menuBar)
+
     public void init(MainController mainController) {
         this.mainController = mainController;
         mediaViewFitContent();
 
-        // TODO: 02.04.2016 set file via FileChooser from MainController
-        String file = new File("D:/video.mp4").getAbsolutePath();
+        if (mediaPlayer != null) {
+            mediaPlayer.dispose();
+        }
+
         try {
-            media = new Media(new File(file).toURI().toURL().toExternalForm());
+            File playBackFile = mainController.getPlayBackFile();
+            media = new Media(playBackFile.toURI().toURL().toExternalForm());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
