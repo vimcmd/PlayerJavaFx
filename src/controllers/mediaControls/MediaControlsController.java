@@ -10,6 +10,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+import utils.DurationFormatter;
 import utils.FontAwesome;
 
 /**
@@ -137,27 +138,12 @@ public class MediaControlsController implements IMediaControls {
         }
     }
 
-    // TODO: 01.04.2016 move to util class?
-    private String getTimeFormatted(Duration duration) {
-        String time;
-        int hours = (int) duration.toHours();
-        int minutes = (int) duration.toMinutes() - hours * 60;
-        int seconds = (int) duration.toSeconds() - hours * 60 * 60 - minutes * 60;
-
-        if (hours > 0 & minutes > 0 & seconds > 0) {
-            time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
-        } else {
-            time = String.format("%02d:%02d", minutes, seconds);
-        }
-        return time;
-    }
-
     private String getCurrentTimeFormatted() {
-        return getTimeFormatted(mediaPlayer.getCurrentTime());
+        return DurationFormatter.getTimeFormatted(mediaPlayer.getCurrentTime());
     }
 
     private String getTotalDurationFormatted() {
-        return getTimeFormatted(mediaPlayer.getTotalDuration());
+        return DurationFormatter.getTimeFormatted(mediaPlayer.getTotalDuration());
     }
 
     public void playPause(ActionEvent event) {
