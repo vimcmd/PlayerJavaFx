@@ -3,9 +3,8 @@ package controllers.menuBar;
 import controllers.MainController;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
-import javafx.stage.FileChooser;
 
-import java.io.File;
+import java.io.FileNotFoundException;
 
 public class MenuBarController {
     @FXML
@@ -18,15 +17,8 @@ public class MenuBarController {
         this.mainController = mainController;
     }
 
-    public void openFile() {
-        FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter mediaFiles = new FileChooser.ExtensionFilter("Media files", "*.mp4", "*.avi");
-        fileChooser.getExtensionFilters().add(mediaFiles);
-
-        File file = fileChooser.showOpenDialog(mainController.getPrimaryStage());
-        if (file != null) {
-            this.mainController.setPlayBackFile(file);
-        }
+    public void openFile() throws FileNotFoundException {
+        mainController.setPlayBackFile(mainController.getPlaybackFileViaOpenDialog());
     }
 
 }

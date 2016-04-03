@@ -8,7 +8,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 
 public class MediaPlayerController implements IMediaPlayer {
@@ -25,19 +25,17 @@ public class MediaPlayerController implements IMediaPlayer {
 
     public void init(MainController mainController) {
         this.mainController = mainController;
-        mediaViewFitContent();
-
-        if (mediaPlayer != null) {
-            mediaPlayer.dispose();
-        }
 
         try {
-            File playBackFile = mainController.getPlayBackFile();
-            media = new Media(playBackFile.toURI().toURL().toExternalForm());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+            media = new Media(mainController.getPlaybackFile().toURI().toURL().toExternalForm());
+        } catch (MalformedURLException | FileNotFoundException e1) {
+            e1.printStackTrace();
         }
 
+        if (mediaPlayer != null) {
+            mediaViewFitContent();
+            mediaPlayer.dispose();
+        }
         mediaPlayer = new MediaPlayer(media);
         mediaView.setMediaPlayer(mediaPlayer);
         mediaPlayer.setAutoPlay(true);
